@@ -45,4 +45,13 @@ Will run a local webserver on port 8000 where a live preview of the docs are ava
 mkdocs build
 ```
 
+### Deploy
+
+To deploy the application run the following command.
+This will deploy this project to github pages.
+
+```shell script
+./bin/deploy.sh
+```
+
 Will generate a **site** folder which can be uploaded to a webserver.
