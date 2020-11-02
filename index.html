@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>JWT secured API - Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> JWT secured API - Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#application-workflow-design">Application workflow / design</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#http-kernel">Http kernel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cli-kernel">CLI kernel</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#add-the-core">Add the core</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#define-your-configuration-path">Define your configuration path</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add-your-environment-variables">Add your environment variables</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#build">Build</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create-public-and-private-key-for-jwt">Create public and private key for JWT</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-add-endpoints-routes">How to add endpoints / routes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#create-an-action">Create an action</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-modify-existing-routes">How to modify existing routes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-add-new-commands">How to add new commands</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#some-words-about-the-cache">Some words about the cache</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cache-options">Cache options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#how-to-clear-the-cache">How to clear the cache</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#auth-jwt">Auth / JWT</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-to-define-client-ids">How to define client ids</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#how-to-obtain-a-token">How to obtain a token</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#how-to-verify-a-token">How to verify a token</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#disable-jwt">Disable JWT</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#extendability">Extendability</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#symfony-events">Symfony events</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#middlewares">Middlewares</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#di">DI</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#overriding-error-formatting">Overriding error formatting</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#graphql">GraphQL</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">JWT secured API - Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><img alt="alt text" src="https://travis-ci.org/0m3gaC0d3/jwt-secured-api-core.svg?branch=master" title="Build status" /></p>
+<h1 id="simple-jwt-secured-api-core">Simple JWT secured API Core</h1>
+<p>This is the core component of the simple jwt based API skeleton to kick start your API development.
+It is based on the PHP micro framework <a href="http://www.slimframework.com/">Slim 4</a>
+ and some well-known <a href="https://symfony.com/">Symfony 5</a> components.</p>
+<p>The skeleton comes also bundled with <a href="https://symfony.com/doc/current/components/dependency_injection.html">DI (dependency injection)</a>
+ and <a href="https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/index.html">Doctrine DBAL</a>.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>PHP 7.4+</li>
+<li>composer</li>
+<li>openssl</li>
+<li>PHP extension ext-json</li>
+</ul>
+<h2 id="application-workflow-design">Application workflow / design</h2>
+<p>This framework uses the <a href="https://wikipedia.org/wiki/Action%E2%80%93domain%E2%80%93responder">ADR</a>
+pattern to provide API endpoints. This means: each endpoint and HTTP method results in a single action file.</p>
+<p>The framework provides an easy workflow to create robust and scalable REST-APIs (There is even GraphQL support).</p>
+<p>Almost every part of the framework is extendable by using symfony events, service decoration or middlewares.</p>
+<h3 id="http-kernel">Http kernel</h3>
+<p>For each HTTP based request the HTTP-Kernel is used to bootstrap the application. it provides DI,
+the underlying slim framework and route configurations.</p>
+<h3 id="cli-kernel">CLI kernel</h3>
+<p>The CLI-Kernel is used to bootstrap symfony commands or testing frameworks.
+It bootstraps the application without the HTTP components (Slim, Routes, etc.).</p>
+<h2 id="setup">Setup</h2>
+<h3 id="add-the-core">Add the core</h3>
+<p>First require the core <code>omegacode/jwt-secured-api-core</code>.</p>
+<h3 id="define-your-configuration-path">Define your configuration path</h3>
+<p>In your composer json add an extra section, which points to your configuration folder.</p>
+<pre><code class="json">...
+    &quot;extra&quot;: {
+        &quot;jwt-secured-api&quot;: {
+            &quot;conf-dir&quot;: &quot;path/to/conf/directory&quot;
+        }
+    }
+...
+</code></pre>
+
+<p>The configuration folder should contain two <code>.yml</code> files.
+* <code>routes.yaml</code>
+* <code>services.yaml</code></p>
+<h3 id="add-your-environment-variables">Add your environment variables</h3>
+<p>Next you need to provide some environment variables.
+This can be archived by copying the <code>.env.dist</code> file of the core and save it as <code>.env</code> in the root of your project.
+Adjust each value of the file to your needs.</p>
+<h3 id="build">Build</h3>
+<p>Finally, you have to build your project by running  <code>composer install</code>.</p>
+<h3 id="create-public-and-private-key-for-jwt">Create public and private key for JWT</h3>
+<p>Run <code>bin/console api:keys:generate</code> to generate the keys.</p>
+<h2 id="how-to-add-endpoints-routes">How to add endpoints / routes</h2>
+<p>To provide endpoints you have to define one or more routes. This happens in your <code>routes.yaml</code>.</p>
+<p>An example route looks like this:</p>
+<pre><code class="yaml">routes:
+  -
+    name: home
+    route: /
+    methods: [get]
+    action: App\Action\Standard\WelcomeAction
+    middlewares:
+      - OmegaCode\JwtSecuredApiCore\Middleware\CacheableHTMLMiddleware
+</code></pre>
+
+<ul>
+<li><code>name</code>: Your route needs an unique name (This will be used as an internal identifier).</li>
+<li><code>route</code>: Also the actual endpoint / URL of your route must be provided
+(Check out the <a href="http://www.slimframework.com/docs/v4/objects/routing.html">Slim Documentation</a> the see all possibilities).</li>
+<li><code>methods</code>: Next you can provide one or more HTTP-Methods to listen to. Other methods calling this endpoint resulting in 400 errors.</li>
+<li><code>action</code>: This is the actual implementation of your action class. Simple enter the FQCN of your action.</li>
+<li><code>middlewares</code>: Here you can provide middlewares to extend the request behavior.
+To protect your route with JWT, add the following middle ware: <code>OmegaCode\JwtSecuredApiCore\Middleware\JsonWebTokenMiddleware</code>.
+There are also middlewares for caching HTML or JSON responses (<code>OmegaCode\JwtSecuredApiCore\Middleware\CacheableJSONMiddleware</code>
+and <code>OmegaCode\JwtSecuredApiCore\Middleware\CacheableHTMLMiddleware</code>.</li>
+</ul>
+<h3 id="create-an-action">Create an action</h3>
+<p>To handle the request and business logic of a single route we use so called actions.</p>
+<p>An action can look like this:</p>
+<pre><code class="php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Action\Auth;
+
+use OmegaCode\JwtSecuredApiCore\Action\AbstractAction;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class AwesomeAction extends AbstractAction
+{
+    public function __invoke(Request $request, Response $response): Response
+    {
+        // Use the following to access dynamic route arguments data.
+        // $dynamicRouteArguments = $this-&gt;getArguments();
+
+        $data = [
+            &quot;data&quot; =&gt; &quot;Awesome data!&quot;
+        ];
+        $response-&gt;getBody()-&gt;write((string) json_encode($data));
+        $response = $response-&gt;withStatus(201)-&gt;withHeader('Content-type', 'application/json');
+
+        return $response;
+    }
+}
+</code></pre>
+
+<p>Note that your action must extend <code>OmegaCode\JwtSecuredApiCore\Action\AbstractAction</code>.</p>
+<blockquote>
+<p>NOTE: Dynamic routes (<code>/my/route/{arg}</code>) arguments data can be accessed in any action
+by calling <code>$this-&gt;getArguments()</code>.</p>
+</blockquote>
+<h2 id="how-to-modify-existing-routes">How to modify existing routes</h2>
+<p>In some circumstances you may need to modify or remove an existing route. This can be archived by subscribing to an event.
+Your subscriber can look like the following:</p>
+<pre><code class="php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Subscriber;
+
+use OmegaCode\JwtSecuredApiCore\Event\RouteCollectionFilledEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class RouteSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RouteCollectionFilledEvent::NAME =&gt; 'onFilled',
+        ];
+    }
+
+    public function onFilled(RouteCollectionFilledEvent $event): void
+    {
+        $routeCollection = $event-&gt;getCollection();
+        $routeToRemove = $routeCollection-&gt;findByName('myRouteToRemove');
+        $routeCollection-&gt;remove($routeToRemove);
+    }
+}
+</code></pre>
+
+<p>Remember to introduce your subscriber to your <code>service.yml</code>.</p>
+<pre><code class="yaml">services:
+  ...
+  App\Subscriber\RouteSubscriber:
+    tags:
+      - 'kernel.event_subscriber'
+  ...
+</code></pre>
+
+<h2 id="how-to-add-new-commands">How to add new commands</h2>
+<p>You can create CLI-Commands or better said <a href="https://symfony.com/doc/current/components/console.html">symfony commands</a>
+by providing a command class and an entry in your <code>service.yml</code>, which allows DI in your command.</p>
+<p>An example can look like:</p>
+<pre><code class="php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class AwesomeCommand extends Command
+{
+    protected static $defaultName = 'app:awesome';
+
+    protected function configure(): void
+    {
+        $this-&gt;setDescription('This command prints &quot;awesome&quot; to the console');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        echo &quot;Awesome!&quot;.PHP_EOL;
+
+        return 0;
+    }
+}
+</code></pre>
+
+<p>And your <code>service.yml</code> entry could look like:</p>
+<pre><code class="yaml">services:
+  ...
+  App\Command\AwesomeCommand:
+    tags:
+      - { name: 'console.command', command: 'app:awesome' }
+  ...
+</code></pre>
+
+<h2 id="some-words-about-the-cache">Some words about the cache</h2>
+<p>The framework caches some work to increase the response speed of your API.</p>
+<p>The following is a list of all cached parts of the core
+* <code>Request cache</code>: You can cache a request by providing cacheable middlewares
+(<code>OmegaCode\JwtSecuredApiCore\Middleware\JsonWebTokenMiddleware</code>, <code>OmegaCode\JwtSecuredApiCore\Middleware\CacheableJSONMiddleware</code>)
+to your route configuration.
+Remember to enable that feature by setting the environment variable <code>ENABLE_REQUEST_CACHE</code> to <code>1</code></p>
+<ul>
+<li><code>System cache</code>: The system cache stores the configuration directories of each package related to the core.
+This process is really expensive in terms of time.
+For debugging purposes you can disable this cache by setting <code>ENABLE_SYSTEM_CACHE</code> to <code>1</code>.</li>
+</ul>
+<h3 id="cache-options">Cache options</h3>
+<p>The <code>.env</code> file contains two more variables about caching</p>
+<ul>
+<li><code>CACHE_ADAPTER_CLASS</code>: The framework uses the
+<a href="https://symfony.com/doc/current/components/cache.html">symfony cache component</a> to cache data.
+This enables you to define the actual storage of the cache (File, APCu, Redis...).
+To change the actual cache implementation of the core, this environment variable is given. Simple change the FQCN with the one you need.
+(<em>This is going to change soon</em>)</li>
+<li><code>REQUEST_CACHE_LIFE_TIME</code>: This environment variable is used to define the live time of the request cache.
+(<em>This is going to change soon</em>)</li>
+</ul>
+<h3 id="how-to-clear-the-cache">How to clear the cache</h3>
+<p>To clear the cache of the application a command can be used (<code>bin/console cache:clear</code>).</p>
+<h2 id="auth-jwt">Auth / JWT</h2>
+<p>The core comes with <a href="https://wikipedia.org/wiki/JSON_Web_Token">JWT</a> support.
+To enable a JWT secured rout simply add the following middleware:
+<code>OmegaCode\JwtSecuredApiCore\Middleware\JsonWebTokenMiddleware</code></p>
+<p>To create the signature a private and a public key is needed.</p>
+<p>You clients need to navigate to <code>/auth</code> to obtain a JWT by providing a valid client ID.</p>
+<h3 id="how-to-define-client-ids">How to define client ids</h3>
+<p>Clients are defined in the <code>clients.json</code> in the root of your project (Never commit this file to VCS!).
+This file contains the configuration of your API clients. A client record contains of the following properties:
+* <code>ip</code>: (<em>optional</em>) Used to restrict access to client IP address.
+* <code>secret</code>: This is the key your clients need to obtain tokens by the API.
+* <code>permissions</code>: (<em>optional</em>) An array of permissions (strings).
+How your application reacts to those values is left by you. They are a part of the claims of the token.</p>
+<p>It is recommended to generate new clients using the following command:
+````shell script
+bin/console api:client:add</p>
+<pre><code>
+You can also list your defined clients using teh following command:
+````shell script
+bin/console api:client:list
+</code></pre>
+
+<p><em>As an additional protection layer you can add an IP restriction to your client configuration.</em></p>
+<h3 id="how-to-obtain-a-token">How to obtain a token</h3>
+<p>To obtain tokens there is a route given by the core <code>/auth</code></p>
+<p>The response of this request contains a json object like the following:</p>
+<pre><code class="json">{
+    &quot;access_token&quot;: &quot;...&quot;,
+    &quot;token_type&quot;: &quot;Bearer&quot;,
+    &quot;expires_in&quot;: 900
+}
+</code></pre>
+
+<h3 id="how-to-verify-a-token">How to verify a token</h3>
+<p>To verify a token you can navigate to <code>/auth/verify</code>. Remember to add the token to validate in the Authorization header.</p>
+<p>The response of this request contains a json object like the following:</p>
+<pre><code class="json">{
+    &quot;success&quot;: true
+}
+</code></pre>
+
+<h3 id="disable-jwt">Disable JWT</h3>
+<p>Sometimes you might want to disable JWT during development or simply don´t need that feature.
+To do so, there is an environment variable called <code>ENABLE_JWT</code>.
+Be aware, this option will not remove the corresponding auth routes.</p>
+<h2 id="extendability">Extendability</h2>
+<p>One of the main goals of this framework is extendability. To archive this well-known systems have been integrated.</p>
+<h3 id="symfony-events">Symfony events</h3>
+<p><a href="https://symfony.com/doc/current/components/event_dispatcher.html">Symfony events</a> are used to extend the system without
+ using something like subclassing or other methods. A good example for core usage is the route collection.</p>
+<p>Following a list of all existing events:
+* <code>route_collection.filled</code>: Manipulate routes.
+* <code>request.pre</code>: Manipulate the request / response before the action executes
+* <code>request.post</code>: Manipulate the request / response after the action executes
+* <code>kernel.pre</code>: This event is triggered early in the process of building the HTTP kernel.
+* <code>kernel.post</code>: This event is triggered directly before Slim kicks in.</p>
+<h3 id="middlewares">Middlewares</h3>
+<ul>
+<li><code>OmegaCode\JwtSecuredApiCore\Middleware\JsonWebTokenMiddleware</code>: Secures your routes with JWT.</li>
+<li><code>OmegaCode\JwtSecuredApiCore\Middleware\CacheableJSONMiddleware</code>: Caches your response as JSON.</li>
+<li><code>OmegaCode\JwtSecuredApiCore\Middleware\CacheableHTMLMiddleware</code>: Caches your response as HTML.</li>
+</ul>
+<h3 id="di">DI</h3>
+<p><a href="https://symfony.com/doc/current/components/dependency_injection.html">Symfony Dependency injection</a> provides a way
+to extend the core. You can <a href="https://symfony.com/doc/current/service_container/service_decoration.html">decorate</a>
+any service (Note that each action is also a service) to add custom code.</p>
+<h2 id="logging">Logging</h2>
+<p>To enable logging simply set the environment variable <code>ENABLE_LOG</code> to <code>1</code>. The log currently only logs API errors.</p>
+<h2 id="errors">Errors</h2>
+<p>Each error comes wrapped in JSON to ensure better/consistent API experiences for your clients.</p>
+<h3 id="overriding-error-formatting">Overriding error formatting</h3>
+<p>You can control the formatting of occurring errors.
+To do so decorate <code>\OmegaCode\JwtSecuredApiCore\Error\Handler\ApiErrorRenderer</code> like this:</p>
+<p><em>services.yaml</em></p>
+<pre><code class="yaml">services:
+  #...
+  Vendor\MyProject\MyCustomErrorRenderer:
+    decorates: OmegaCode\JwtSecuredApiCore\Error\Handler\ApiErrorRenderer
+    arguments:
+      $showErrors: '%env(bool:SHOW_ERRORS)%'
+      $logErrors: '%env(bool:ENABLE_LOG)%'
+</code></pre>
+
+<p><em>MyCustomErrorRenderer.php</em></p>
+<pre><code class="php">&lt;?php
+declare(strict_types=1);
+
+namespace Vendor\MyProject;
+
+use OmegaCode\JwtSecuredApiCore\Error\Renderer\ErrorRendererInterface;use Throwable;
+
+class MyCustomErrorRenderer implements ErrorRendererInterface
+{
+    public function __invoke(Throwable $exception, bool $displayErrorDetails): string
+    {
+        return json_encode([
+           'message' =&gt; $exception-&gt;getMessage(),
+           'code' =&gt; $exception-&gt;getCode()
+        ]);
+    }
+
+    public function getContentType(): string
+    {
+        return 'application/json';
+    }
+}
+</code></pre>
+
+<h2 id="graphql">GraphQL</h2>
+<p>If you want to use <a href="https://wikipedia.org/wiki/GraphQL">GraphQL</a>,
+simply run  <code>composer require omegacode/jwt-secured-api-graphql</code>.
+Read the documentation of the project for more information.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.1.2
+Build Date UTC : 2020-11-02 20:11:57.531418+00:00
+-->
