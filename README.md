@@ -53,5 +53,3 @@ This will deploy this project to github pages.
 ```shell script
 ./bin/deploy.sh
 ```
-
-Will generate a **site** folder which can be uploaded to a webserver.
